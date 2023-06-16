@@ -93,6 +93,16 @@ impl<K: Eq + Hash + ImplicitClone + 'static, V: PartialEq + ImplicitClone + 'sta
     }
 }
 
+impl<K: Eq + Hash + ImplicitClone + 'static, V: PartialEq + ImplicitClone + 'static>
+    From<IMap<K, V>> for Rc<Map<K, V>> {
+    fn from(a: IMap<T>) -> Rc<[T]> {
+        match a {
+            IMap::Static(a) => Rc::new(a.into_iter().collect::<Map<K, V>>()),
+            IMap::Rc(a) => a,
+        }
+    }
+}
+
 impl<K: Eq + Hash + ImplicitClone + 'static, V: PartialEq + ImplicitClone + 'static> IMap<K, V> {
     /// Return an iterator over the key-value pairs of the map, in their order.
     #[inline]

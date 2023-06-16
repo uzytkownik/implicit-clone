@@ -62,6 +62,15 @@ impl<T: ImplicitClone + 'static> From<Rc<[T]>> for IArray<T> {
     }
 }
 
+impl<T: ImplicitClone + 'static> From<IArray<T>> for Rc<[T]> {
+    fn from(a: IArray<T>) -> Rc<[T]> {
+        match a {
+            IArray::Static(a) => Rc::from(a),
+            IArray::Rc(a) => a,
+        }
+    }
+}
+
 impl<T: ImplicitClone + 'static> IArray<T> {
     /// Returns an iterator over the slice.
     ///

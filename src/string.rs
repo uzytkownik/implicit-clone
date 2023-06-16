@@ -91,6 +91,15 @@ impl From<Cow<'static, str>> for IString {
     }
 }
 
+impl From<IString> for Rc<str> {
+    fn from(a: IString) -> Rc<str> {
+        match a {
+            IString::Static(s) => Rc::from(s),
+            IString::Rc(s) => s,
+        }
+    }
+}
+
 impl PartialEq<IString> for IString {
     fn eq(&self, other: &IString) -> bool {
         self.as_str().eq(other.as_str())
