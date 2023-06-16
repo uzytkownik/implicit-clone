@@ -1,5 +1,6 @@
 use std::borrow::Cow;
 use std::fmt::Debug;
+use std::str::FromStr;
 
 /// An immutable string type inspired by [Immutable.js](https://immutable-js.com/).
 ///
@@ -158,6 +159,13 @@ impl serde::Serialize for IString {
 impl<'de> serde::Deserialize<'de> for IString{
     fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
         <String as serde::Deserialize>::deserialize(deserializer).map(IString::from)
+    }
+}
+
+impl FromStr for IString {
+    type Err = std::convert::Infallible;
+    fn from_str(value: &str) -> Result<Self, Self::Err> {
+        Ok(IString::from(String::from(value)))
     }
 }
 
